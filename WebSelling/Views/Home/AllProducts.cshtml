@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewData["Title"] = "AllProducts";
+     ViewData["ActivePage"] = "AllProducts";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@using X.PagedList.Mvc.Core;
+@model X.PagedList.IPagedList<DanhMucSanPham>
+
+      <!-- Products -->
+      <div class="products">
+        <div class="cl">&nbsp;</div>
+        @foreach(var item in Model ){
+            @await Html.PartialAsync("_ProductPartial", item)
+        }
+        <div class="cl">&nbsp;</div>
+      </div>
+
+      <div class="product_pagination">
+        @Html.PagedListPager(Model,page => Url.Action("AllProducts", new {page = page }))    
+        <div class="cl">&nbsp;</div>
+      </div>
+
+      

@@ -1,0 +1,58 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    var userName = Context.Session.GetString("UserName");
+}
+<style>
+        .btn-login {
+        background-color: #FFFFFF;
+        color: #35a036;
+        float: right;
+        transition: background-color 0.3s, color 0.3s;
+        border-radius: 4px;
+        font-weight: bold;
+        }       
+      .pd48 {
+        padding: 4px 8px !important;
+
+      }
+      .pd412{
+        padding: 4px 12px !important; 
+
+      }
+      .mt10 {
+        margin-top: 10px !important;
+
+      }
+      .mt-31{
+        margin-top: -31px !important;
+
+      }
+      .btn-login:hover {
+          cursor:pointer;
+          opacity:0.8; 
+          background-color: #35a036;
+          color: #FFFFFF;
+      }
+
+      p {
+          font-size:14px;
+          color:#FFFF;
+      }
+</style>
+@if (!string.IsNullOrEmpty(userName))
+{   
+    <div class="cart-container">
+        <p>Xin chào, @userName </p>
+        <a asp-controller="Profile" asp-action="Index" asp-route-Username="@userName"><i class="fa-solid fa-user"></i></a>
+    </div>
+    <form asp-controller="Access" asp-action="Logout" method="post">
+        <button class="btn-login pd48 mt-31" type="submit" >Logout</button>
+    </form>
+}
+else
+{
+    <form asp-controller="Access" asp-action="Login" method="post">
+        <button class="btn-login pd412 mt10" type="submit" >Login</button>
+    </form>
+
+}

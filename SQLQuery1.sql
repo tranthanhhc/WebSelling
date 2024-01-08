@@ -1,0 +1,166 @@
+USE [W-Device];
+GO
+
+CREATE TABLE TaiKhoan (
+    username CHAR(25) PRIMARY KEY,
+    password NVARCHAR(256) NOT NULL,
+    Loai_user TINYINT NULL
+);
+
+CREATE TABLE NhanVien (
+    MaNhanVien CHAR(25) PRIMARY KEY,
+    username CHAR(25) FOREIGN KEY REFERENCES TaiKhoan(username),
+    TenNhanVien NVARCHAR(100) NULL,
+    NgaySinh DATE NULL,
+    SoDienThoai CHAR(15) NULL,
+    DiaChi NVARCHAR(150) NULL,
+    ChucVu NVARCHAR(100) NULL,
+    AnhDaiDien CHAR(100) NULL,
+    GhiChu NVARCHAR(100) NULL
+);
+
+CREATE TABLE KhachHang (
+    MaKhachHang CHAR(25) PRIMARY KEY,
+    username CHAR(25) FOREIGN KEY REFERENCES TaiKhoan(username),
+    TenKhachHang NVARCHAR(100) NULL,
+    NgaySinh DATE NULL,
+    SoDienThoai CHAR(15) NULL,
+    DiaChi NVARCHAR(150) NULL,
+    LoaiKhachHang TINYINT NULL,
+    AnhDaiDien CHAR(100) NULL,
+    GhiChu NVARCHAR(100) NULL
+);
+
+CREATE TABLE HoaDon (
+    MaHoaDon CHAR(25) PRIMARY KEY,
+    NgayHoaDon DATE NULL,
+    MaKhachHang CHAR(25) FOREIGN KEY REFERENCES KhachHang(MaKhachHang) ,
+    MaNhanVien CHAR(25) FOREIGN KEY REFERENCES NhanVien(MaNhanVien) ,
+    TongTien MONEY NULL,
+    GiamGia FLOAT NULL,
+    PhuongThucThanhToan TINYINT NULL,
+    MaSoThue CHAR(100) NULL,
+    ThongTinThue NVARCHAR(250) NULL,
+    GhiChu NVARCHAR(100) NULL
+);
+
+CREATE TABLE ChatLieu (
+	MaChatLieu CHAR(25) PRIMARY KEY,
+	ChatLieu NVARCHAR(150) NULL
+)
+
+CREATE TABLE HangSanXuat (
+	MaHangSanXuat CHAR(25) PRIMARY KEY,
+	HangSanXuat NVARCHAR(100) NULL,
+	MaNuocThuongHieu CHAR(25) NULL
+)
+
+CREATE TABLE LoaiDT (
+	MaDT CHAR(25) PRIMARY KEY,
+	TenLoai NVARCHAR(100) NULL
+)
+
+CREATE TABLE LoaiSanPham (
+	MaLoai CHAR(25) PRIMARY KEY,
+	Loai NVARCHAR(100) NULL
+)
+
+CREATE TABLE QuocGia (
+	MaNuoc CHAR(25) PRIMARY KEY,
+	TenNuoc NVARCHAR(100) NULL
+)
+
+CREATE TABLE DanhMucSanPham (
+    MaSanPham CHAR(25) PRIMARY KEY,
+    TenSanPham NVARCHAR(100) NULL,
+	MaChatLieu CHAR(25) FOREIGN KEY REFERENCES ChatLieu(MaChatLieu) ,
+    Model NVARCHAR(50) NULL,
+    CanNang FLOAT NULL,
+    MaHangSanXuat CHAR(25) FOREIGN KEY REFERENCES HangSanXuat(MaHangSanXuat) ,
+    MaNuocSanXuat CHAR(25) FOREIGN KEY REFERENCES QuocGia(MaNuoc) ,
+    MaDacTinh CHAR(25) NULL,
+    ThoiGianBaoHanh INT NULL,
+    GioiThieuSanPham NVARCHAR(MAX) NULL,
+    ChietKhau FLOAT NULL,
+    MaLoai CHAR(25) FOREIGN KEY REFERENCES LoaiSanPham(MaLoai),
+	MaDT CHAR(25) NULL FOREIGN KEY REFERENCES LoaiDT( MaDT) ,
+    AnhSanPham CHAR(100) NULL,
+    GiaNhoNhat MONEY NULL,
+    GiaLonNhat MONEY NULL
+);
+
+
+CREATE TABLE AnhSanPham (
+	MaSanPham CHAR(25) FOREIGN KEY REFERENCES DanhMucSanPham(MaSanPham) ,
+	TenFileAnh CHAR(100) NOT NULL,
+	ViTri SMALLINT NULL, 
+	CONSTRAINT PK_AnhSanPham PRIMARY KEY ( MaSanPham , TenFileAnh )
+) ON [PRIMARY]
+
+
+CREATE TABLE MauSac (
+	MaMauSac CHAR(25) PRIMARY KEY,
+	TenMauSac NVARCHAR(100) NULL
+)
+
+CREATE TABLE  KichThuoc (
+	MaKichThuoc CHAR(25) PRIMARY KEY,
+	KichThuoc NCHAR(150) NULL
+)
+
+CREATE TABLE ChiTietSanPham (
+	MaChiTietSP CHAR(25) PRIMARY KEY,
+	MaSanPham CHAR(25)  FOREIGN KEY REFERENCES DanhMucSanPham(MaSanPham) ,
+	MaKichThuoc CHAR(25) FOREIGN KEY REFERENCES KichThuoc(MaKichThuoc) ,
+	MaMauSac CHAR(25) FOREIGN KEY REFERENCES MauSac(MaMauSac), 
+	AnhDaiDien CHAR(100) NULL,
+	VIDEO CHAR(100) NULL,
+	DonGia FLOAT NULL,
+	GiamGia FLOAT NULL,
+	SoLuongTon INT NULL
+)
+
+
+CREATE TABLE AnhChiTietSP (
+	MaChiTietSP CHAR(25) FOREIGN KEY REFERENCES ChiTietSanPham(MaChiTietSP) ,
+	TenFileAnh CHAR(100) NOT NULL,
+	ViTri SMALLINT NULL, 
+	CONSTRAINT PK_AnhChiTietSP PRIMARY KEY ( MaChiTietSP, TenFileAnh )
+) ON [PRIMARY]
+
+
+CREATE TABLE ChiTietHoaDon (
+    MaHoaDon CHAR(25) FOREIGN KEY REFERENCES HoaDon(MaHoaDon) ,
+    MaChiTietSP CHAR(25) FOREIGN KEY REFERENCES ChiTietSanPham(MaChiTietSP) ,
+    SoLuongBan INT NULL,
+    DonGiaBan MONEY NULL,
+    GiamGia FLOAT NULL,
+    GhiChu NVARCHAR(100) NULL,
+    CONSTRAINT PK_ChiTietHoaDon PRIMARY KEY ( MaHoaDon, MaChiTietSP)
+) ON [PRIMARY]
+
+
+CREATE TABLE GioHang (
+    MaGioHang CHAR(25) PRIMARY KEY,
+    TenSanPham NVARCHAR(100) NULL,
+    SoLuong INT NULL,
+    GiaTien MONEY NULL,
+    GhiChu NVARCHAR(100) NULL
+);
+CREATE TABLE DonHang (
+    MaDonHang CHAR(25) PRIMARY KEY,
+    MaKhachHang CHAR(25) FOREIGN KEY REFERENCES KhachHang(MaKhachHang),
+    NgayDatHang DATE NULL,
+    TongTien MONEY NULL,
+    DiaChiGiaoHang NVARCHAR(150) NULL,
+    GhiChu NVARCHAR(100) NULL
+);
+
+CREATE TABLE ChiTietDonHang (
+    MaDonHang CHAR(25) FOREIGN KEY REFERENCES DonHang(MaDonHang),
+    MaSanPham CHAR(25) FOREIGN KEY REFERENCES DanhMucSanPham(MaSanPham),
+    SoLuong INT NULL,
+    DonGia MONEY NULL,
+    GhiChu NVARCHAR(100) NULL,
+    PRIMARY KEY (MaDonHang, MaSanPham)
+);

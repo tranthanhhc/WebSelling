@@ -1,0 +1,62 @@
+﻿@using WebSelling.Models;
+@using X.PagedList.Mvc.Core;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model X.PagedList.IPagedList<ChiTietSanPham>
+
+@{
+    ViewData["Title"] = "ChiTietSanPham";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Quản Lý Sản Phẩm </h1>
+
+<p>
+    <a class="btn btn-gradient-danger btn-fw" asp-action="AddNewDetail">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr class="table-danger">
+            <th>
+               Ảnh sản phẩm
+            </th>
+            <th>
+                Đơn Giá
+            </th>
+            <th>
+                Giảm Giá
+            </th>
+            <th>
+                Số lượng tồn 
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr class="table-success" >
+            <td>
+                @Html.DisplayFor(modelItem => item.AnhDaiDien)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DonGia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GiamGia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SoLuongTon)
+            </td>
+            <td>
+                <a class="btn btn-gradient-primary btn-fw" asp-action="UpdateDetail" asp-route-maSanPham="@item.MaChiTietSp">Edit</a> |
+                <a class="btn btn-gradient-info btn-fw" asp-action="DeleteDetail" asp-route-maSanPham="@item.MaChiTietSp">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@Html.PagedListPager(Model,page => Url.Action("ChiTietSanPham", new {page = page }),
+new X.PagedList.Web.Common.PagedListRenderOptions(){
+    LiElementClasses = new List<String> {"page-item"},
+    PageClasses = new List<String> {"page-link"}
+})

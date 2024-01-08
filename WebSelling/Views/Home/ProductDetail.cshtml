@@ -1,0 +1,80 @@
+﻿
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "ProductDetail";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+
+@model WebSelling.ViewModels.ProductDetailViewModel
+
+
+@*<div class="products">
+        <div class="cl">&nbsp;</div>
+       
+       <ul>
+          <li> 
+              <div class="product-img detail-img">
+              <a href="#"><img src="@Url.Content("../ProductImages/Image/"+Model.AnhSanPham)" alt="" /></a>
+              </div>
+              
+            <div class="product-info detail-info">
+              <h3>@Model.TenSanPham</h3>
+              <div class="product-desc">
+                <h4>DESCRIBE:</h4>
+                <p>@Model.GioiThieuSanPham</p> 
+                <strong class="price">@Model.GiaLonNhat $</strong> </div>
+            </div>
+          </li>
+        </ul> 
+        <div class="cl">&nbsp;</div>
+      </div>*@
+
+<div id="content">
+    <div class="product-container">
+    <div style="place-self:flex-start;"><a href="javascript:history.go(-1)" class="btn-back">Back</a></div>
+    <h1>@Model.danhMucSp.TenSanPham</h1>
+    <div class="product-image">
+      <img src="@Url.Content("../ProductImages/Image/"+Model.danhMucSp.AnhSanPham)" alt="" />
+
+      
+    </div>
+
+    <div class="product-thumbnails">
+        <div class="product-thumbnail">
+            <!--xem bài 7 8p55s để đổi ảnh chi tiết sản phẩm-->
+          <img src="/ProductImages/Image/headphone.png" alt="Ảnh nhỏ 1">
+        </div>
+        <div class="product-thumbnail">
+          <img src="/ProductImages/Image/headphone.png" alt="Ảnh nhỏ 2">
+        </div>
+        <div class="product-thumbnail">
+          <img src="/ProductImages/Image/headphone.png" alt="Ảnh nhỏ 3">
+        </div>
+      </div>
+    
+    <div class="product-details">
+      <h2 style="margin-bottom:5px;">Thông tin chi tiết</h2>
+      <ul style="list-style-type:none">
+        <li><strong>Thương hiệu:</strong> ABC</li>
+        <li><strong>Màu sắc:</strong> Đen</li>
+        <li><strong>Kích thước:</strong> XL</li>
+        <li><strong>Giá:</strong> @Model.danhMucSp.GiaLonNhat $</li>
+      </ul>
+    </div>
+
+    <div class="product-actions">
+        <div>
+          <button type="button" id="decreaseBtn">-</button>
+          <input type="number" id="quantityInput" min="1" value="1" readonly>
+          <button type="button" id="increaseBtn">+</button>
+        </div>
+      <a asp-action="AddToCart" asp-controller="Cart" asp-route-productId="@Model.danhMucSp.MaSanPham" class="btn btn-primary">Thêm vào giỏ hàng</a>
+    </div>
+
+    <div class="product-description">
+      <h2>Mô tả</h2>
+      <p class="txt-black">@Model.danhMucSp.GioiThieuSanPham</p>
+    </div>
+
+  </div>
+</div>

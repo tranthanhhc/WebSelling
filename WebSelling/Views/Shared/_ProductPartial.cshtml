@@ -1,0 +1,17 @@
+﻿
+@model DanhMucSanPham
+<ul>
+          <li> 
+              <div class="product-img">
+              <a asp-controller="Home" asp-action="ProductDetail" asp-route-maSp="@Model.MaSanPham">
+                  <img src="@Url.Content("../ProductImages/Image/"+Model.AnhSanPham)" alt="" /></a>
+              </div>
+            <div class="product-info">
+              <h3>@Model.TenSanPham</h3>
+              <div class="product-desc">
+                <h4>DESCRIBE:</h4>
+                <p>@Model.GioiThieuSanPham</p> 
+                <strong class="price">$@string.Format("{0:N2}", Model.GiaLonNhat)</strong>
+            </div>
+          </li>
+        </ul> 

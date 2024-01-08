@@ -1,0 +1,80 @@
+﻿@using WebSelling.Models;
+@using X.PagedList.Mvc.Core;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model X.PagedList.IPagedList<KhachHang>
+
+@{
+    ViewData["Title"] = "KhachHang";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Quản Lý Khách Hàng </h1>
+
+<table class="table">
+    <thead>
+        <tr class="table-danger">
+            <th>
+                Tên Khách Hàng
+            </th>
+            <th>
+                Ngày Sinh
+            </th>
+            <th>
+                Số Điện Thoại
+            </th>
+            <th>
+                Địa chỉ
+            </th>
+            <th>
+                Loại khách hàng 
+            </th>
+            <th>
+                Ảnh đại diện
+            </th>
+            <th>
+                Ghi Chú
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr class="table-success">
+            <td>
+                @Html.DisplayFor(modelItem => item.TenKhachHang)
+            </td>
+            <td>
+                @if (item.NgaySinh.HasValue)
+                {
+                    @item.NgaySinh.Value.ToString("dd/MM/yyyy")
+                }               
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SoDienThoai)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiaChi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoaiKhachHang)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AnhDaiDien)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GhiChu)
+            </td>
+            
+            <td>
+                <a class="btn btn-gradient-primary btn-fw" asp-action="UpdateUser" asp-route-maKH="@item.MaKhachHang">Edit</a> |                               
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@Html.PagedListPager(Model,page => Url.Action("KhachHang", new {page = page }),
+new X.PagedList.Web.Common.PagedListRenderOptions(){
+    LiElementClasses = new List<String> {"page-item"},
+    PageClasses = new List<String> {"page-link"}
+})
