@@ -50,7 +50,8 @@ namespace WebSelling.Controllers
 
         public IActionResult Checkout()
         {
-            return View("Checkout");
+            Cart = HttpContext.Session.GetJson<Cart>("cart");
+            return View("Checkout", Cart);
         }
     }
 }
