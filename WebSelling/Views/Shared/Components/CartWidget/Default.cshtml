@@ -5,7 +5,7 @@
 }
 @model Cart
 
-<div class="cart-right"><a class ="cart-icon" asp-controller="Cart">
+<div class="cart-right"><a class ="cart-icon" asp-controller="Cart" asp-action="Index">
           <i class="fa-solid fa-cart-shopping "></i>
           <label> @Model?.Lines.Count </label>
       </a></div> 

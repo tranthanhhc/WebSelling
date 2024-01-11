@@ -24,6 +24,19 @@ namespace WebSelling.Controllers
             }
             return View("Cart",Cart);
         }
+        public IActionResult AddFromProduct(string productId)
+        {
+            DanhMucSanPham? product = db.DanhMucSanPhams.FirstOrDefault(x => x.MaSanPham == productId);
+            if (product != null)
+            {
+                Cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
+                Cart.AddItem(product, 1);
+                HttpContext.Session.SetJson("cart", Cart);
+
+                TempData["Message"] = "Sản phẩm đã được thêm vào giỏ hàng thành công!";
+            }
+            return RedirectToAction("ProductDetail", "Home", new { maSp = productId });
+        }
         public IActionResult MinusToCart(string productId)
         {
             DanhMucSanPham? product = db.DanhMucSanPhams.FirstOrDefault(x => x.MaSanPham == productId);

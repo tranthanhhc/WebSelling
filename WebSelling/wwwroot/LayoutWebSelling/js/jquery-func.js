@@ -73,3 +73,5 @@ $(document).ready(function () {
 		}, 100); // Đặt thời gian chờ là 1 giây (1000ms)
 	});
 });
+
+
