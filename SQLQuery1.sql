@@ -141,12 +141,16 @@ CREATE TABLE ChiTietHoaDon (
 
 
 CREATE TABLE GioHang (
-    MaGioHang CHAR(25) PRIMARY KEY,
+    MaGioHang CHAR(25) PRIMARY KEY, 
     TenSanPham NVARCHAR(100) NULL,
     SoLuong INT NULL,
     GiaTien MONEY NULL,
     GhiChu NVARCHAR(100) NULL
 );
+ALTER TABLE GioHang 
+ADD Username CHAR(25) FOREIGN KEY REFERENCES TaiKhoan(username)
+ALTER TABLE GioHang 
+ADD TongTien DECIMAL NULL
 CREATE TABLE DonHang (
     MaDonHang CHAR(25) PRIMARY KEY,
     MaKhachHang CHAR(25) FOREIGN KEY REFERENCES KhachHang(MaKhachHang),
@@ -164,3 +168,35 @@ CREATE TABLE ChiTietDonHang (
     GhiChu NVARCHAR(100) NULL,
     PRIMARY KEY (MaDonHang, MaSanPham)
 );
+
+CREATE TABLE Comments(
+	 Id INT PRIMARY KEY IDENTITY(1,1),
+	 NoiDung NVARCHAR(MAX) NOT NULL,
+	 Username CHAR(25) FOREIGN KEY REFERENCES TaiKhoan(username),
+	 DatePosted DATETIME NOT NULL
+);
+
+CREATE TABLE HoaDonKhachHang (
+	MaHoaDon INT PRIMARY KEY IDENTITY(1,1),
+	TenKhachHang NVARCHAR(150) NULL,
+	SoDienThoai CHAR(15) NULL,
+    DiaChi NVARCHAR(150) NULL,
+	TenHang NVARCHAR(150) NULL,
+	SoLuong INT NULL,
+	TongTien DECIMAL NULL,
+	NgayTao DATETIME NULL
+);
+
+CREATE TABLE ThongTinKhachHang (
+	
+    username CHAR(25) FOREIGN KEY REFERENCES TaiKhoan(username),
+    TenKhachHang NVARCHAR(100) NULL,
+    NgaySinh DATE NULL,
+    SoDienThoai CHAR(15) NULL,
+    DiaChi NVARCHAR(150) NULL,
+    LoaiKhachHang TINYINT NULL,
+    AnhDaiDien CHAR(100) NULL,
+    GhiChu NVARCHAR(100) NULL
+);
+ALTER TABLE ThongTinKhachHang
+ADD MaKhachHang INT IDENTITY(1,1) PRIMARY KEY

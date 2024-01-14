@@ -226,5 +226,49 @@ namespace WebSelling.Areas.Admin.Controllers
             return View(kH);
 
         }
+        [Route("hoadon")]
+        [Authentication]
+        public IActionResult HoaDon(int? page)
+        {
+            int pageSize = 4;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            var lsthoadon = db.HoaDonKhachHangs.AsNoTracking().OrderBy(x => x.MaHoaDon);
+            PagedList<HoaDonKhachHang> lst = new PagedList<HoaDonKhachHang>(lsthoadon, pageNumber, pageSize);
+            return View(lst);
+        }
+        [Route("suahoadon")]
+        [HttpGet]
+
+        public IActionResult UpdateBill(int maHoaDon)
+        {
+            var hoaDon = db.HoaDonKhachHangs.Find(maHoaDon);
+            return View(hoaDon);
+        }
+
+        [Route("suahoadon")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authentication]
+        public IActionResult UpdateBill(HoaDonKhachHang hoaDon)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Update(hoaDon);
+                db.SaveChanges();
+                return RedirectToAction("HoaDon", "HomeAdmin");
+            }
+            return View(hoaDon);
+        }
+        [Route("xoahoadon")]
+        [HttpGet]
+        public IActionResult DeleteBill(int maHoaDon)
+        {
+            TempData["Message"] = "";
+            var hoaDonKhachHangs = db.HoaDonKhachHangs.Where(x => x.MaHoaDon == maHoaDon).ToList();
+            db.Remove(db.HoaDonKhachHangs.Find(maHoaDon));
+            db.SaveChanges();
+            TempData["Message"] = "Hóa đơn đã được xóa ";
+            return RedirectToAction("HoaDon", "HomeAdmin");
+        }
     }
 }

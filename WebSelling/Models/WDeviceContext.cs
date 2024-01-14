@@ -22,11 +22,13 @@ namespace WebSelling.Models
         public virtual DbSet<ChiTietDonHang> ChiTietDonHangs { get; set; } = null!;
         public virtual DbSet<ChiTietHoaDon> ChiTietHoaDons { get; set; } = null!;
         public virtual DbSet<ChiTietSanPham> ChiTietSanPhams { get; set; } = null!;
+        public virtual DbSet<Comment> Comments { get; set; } = null!;
         public virtual DbSet<DanhMucSanPham> DanhMucSanPhams { get; set; } = null!;
         public virtual DbSet<DonHang> DonHangs { get; set; } = null!;
         public virtual DbSet<GioHang> GioHangs { get; set; } = null!;
         public virtual DbSet<HangSanXuat> HangSanXuats { get; set; } = null!;
         public virtual DbSet<HoaDon> HoaDons { get; set; } = null!;
+        public virtual DbSet<HoaDonKhachHang> HoaDonKhachHangs { get; set; } = null!;
         public virtual DbSet<KhachHang> KhachHangs { get; set; } = null!;
         public virtual DbSet<KichThuoc> KichThuocs { get; set; } = null!;
         public virtual DbSet<LoaiDt> LoaiDts { get; set; } = null!;
@@ -35,6 +37,7 @@ namespace WebSelling.Models
         public virtual DbSet<NhanVien> NhanViens { get; set; } = null!;
         public virtual DbSet<QuocGium> QuocGia { get; set; } = null!;
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; } = null!;
+        public virtual DbSet<ThongTinKhachHang> ThongTinKhachHangs { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -234,6 +237,21 @@ namespace WebSelling.Models
                     .HasConstraintName("FK__ChiTietSa__MaSan__6C190EBB");
             });
 
+            modelBuilder.Entity<Comment>(entity =>
+            {
+                entity.Property(e => e.DatePosted).HasColumnType("datetime");
+
+                entity.Property(e => e.Username)
+                    .HasMaxLength(25)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.HasOne(d => d.UsernameNavigation)
+                    .WithMany(p => p.Comments)
+                    .HasForeignKey(d => d.Username)
+                    .HasConstraintName("FK__Comments__Userna__160F4887");
+            });
+
             modelBuilder.Entity<DanhMucSanPham>(entity =>
             {
                 entity.HasKey(e => e.MaSanPham)
@@ -364,6 +382,18 @@ namespace WebSelling.Models
                 entity.Property(e => e.GiaTien).HasColumnType("money");
 
                 entity.Property(e => e.TenSanPham).HasMaxLength(100);
+
+                entity.Property(e => e.TongTien).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.Username)
+                    .HasMaxLength(25)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.HasOne(d => d.UsernameNavigation)
+                    .WithMany(p => p.GioHangs)
+                    .HasForeignKey(d => d.Username)
+                    .HasConstraintName("FK__GioHang__Usernam__2DE6D218");
             });
 
             modelBuilder.Entity<HangSanXuat>(entity =>
@@ -432,6 +462,29 @@ namespace WebSelling.Models
                     .WithMany(p => p.HoaDons)
                     .HasForeignKey(d => d.MaNhanVien)
                     .HasConstraintName("FK__HoaDon__MaNhanVi__52593CB8");
+            });
+
+            modelBuilder.Entity<HoaDonKhachHang>(entity =>
+            {
+                entity.HasKey(e => e.MaHoaDon)
+                    .HasName("PK__HoaDonKh__835ED13B048D3388");
+
+                entity.ToTable("HoaDonKhachHang");
+
+                entity.Property(e => e.DiaChi).HasMaxLength(150);
+
+                entity.Property(e => e.NgayTao).HasColumnType("datetime");
+
+                entity.Property(e => e.SoDienThoai)
+                    .HasMaxLength(15)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.TenHang).HasMaxLength(150);
+
+                entity.Property(e => e.TenKhachHang).HasMaxLength(150);
+
+                entity.Property(e => e.TongTien).HasColumnType("decimal(18, 0)");
             });
 
             modelBuilder.Entity<KhachHang>(entity =>
@@ -615,6 +668,43 @@ namespace WebSelling.Models
                 entity.Property(e => e.Password)
                     .HasMaxLength(256)
                     .HasColumnName("password");
+            });
+
+            modelBuilder.Entity<ThongTinKhachHang>(entity =>
+            {
+                entity.HasKey(e => e.MaKhachHang)
+                    .HasName("PK__ThongTin__88D2F0E50F522F48");
+
+                entity.ToTable("ThongTinKhachHang");
+
+                entity.Property(e => e.AnhDaiDien)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.DiaChi).HasMaxLength(150);
+
+                entity.Property(e => e.GhiChu).HasMaxLength(100);
+
+                entity.Property(e => e.NgaySinh).HasColumnType("date");
+
+                entity.Property(e => e.SoDienThoai)
+                    .HasMaxLength(15)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.TenKhachHang).HasMaxLength(100);
+
+                entity.Property(e => e.Username)
+                    .HasMaxLength(25)
+                    .IsUnicode(false)
+                    .HasColumnName("username")
+                    .IsFixedLength();
+
+                entity.HasOne(d => d.UsernameNavigation)
+                    .WithMany(p => p.ThongTinKhachHangs)
+                    .HasForeignKey(d => d.Username)
+                    .HasConstraintName("FK__ThongTinK__usern__2BFE89A6");
             });
 
             OnModelCreatingPartial(modelBuilder);

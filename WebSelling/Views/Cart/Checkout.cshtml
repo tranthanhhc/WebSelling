@@ -4,12 +4,16 @@
     ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_LayoutCart.cshtml";
 }
-@model Cart
-<section class="mt-5 mb-4">
-
-        <!--Grid row-->
-        <div class="row">
-
+@model WebSelling.ViewModels.CheckoutViewModel
+<section class="mt-5 mb-4">    
+        <form method="post" asp-action="AddBill">
+         <div class="row">
+             @if (TempData["OrderSuccessMessage"] != null)
+        {
+            <div class="alert alert-success mt12" role="alert" >
+                @TempData["OrderSuccessMessage"]
+            </div>
+        }
           <!--Grid column-->
           <div class="col-lg-8 mb-4">
             <!-- Card -->
@@ -20,29 +24,24 @@
 
                 <!-- Company name -->
                 <div class="md-form md-outline my-0">
-                  <label for="companyName">Name</label>
-                  <input type="text" id="companyName" class="form-control mb-0">
+                  <label asp-for="HoaDonKH.TenKhachHang">Name</label>
+                  <input asp-for="HoaDonKH.TenKhachHang" class="form-control mb-0">
                 </div>
                 <br>
 
                 <!-- Address -->
                 <div class="md-form md-outline mt-0">
-                  <label for="form14">Address</label>
-                  <input type="text" id="form14" placeholder="House number and street name" class="form-control">
+                  <label asp-for="HoaDonKH.DiaChi">Address</label>
+                  <input asp-for="HoaDonKH.DiaChi" placeholder="House number and street name" class="form-control">
                 </div>
                 <br>
 
                 <!-- Phone -->
                 <div class="md-form md-outline">
-                  <label for="form18">Phone</label>
-                  <input type="number" id="form18" class="form-control">
+                  <label asp-for="HoaDonKH.SoDienThoai">Phone</label>
+                  <input asp-for="HoaDonKH.SoDienThoai" class="form-control">
                 </div>
                 <br>
-                <!-- Email address -->
-                <div class="md-form md-outline">
-                  <label for="form19">Email address</label>
-                  <input type="email" id="form19" class="form-control">
-                </div>
               </div>
             </div>
             <!-- Card -->
@@ -55,49 +54,20 @@
 
             <!-- Card -->
             <div class="card mb-4">
-              @*<div class="card-body">
-
-                <h5 class="mb-3">The total amount of</h5>
-
-                <ul class="list-group list-group-flush">
-
-                  <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                    Item
-                    <span>$53.98</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                    Item
-                    <span>$53.98</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                    Shipping
-                    <span>Gratis</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
-                    <div>
-                      <strong>The total amount of</strong>
-                      <strong>
-                        <p class="mb-0">(including VAT)</p>
-                      </strong>
-                    </div>
-                    <span><strong>$53.98</strong></span>
-                  </li>
-                </ul>
-
-                <button type="button" class="btn btn-primary btn-block waves-effect waves-light">Payment Confirmation</button>
-
-              </div>*@
+             
               <div class="card-body">
                     <h5 class="mb-3">The total amount of</h5>
                     <ul class="list-group list-group-flush">
                         @if(Model != null)
                         {
-                           @foreach (var line in Model.Lines)
+                        @foreach (var line in Model.Cart.Lines)
                         {
                             <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                                @line.Product.TenSanPham
-                                <span>@line.Quantity</span>
-                                <span>@string.Format("{0:C2}",line.Product.GiaLonNhat)</span>
+                                <label >@line.Product.TenSanPham</label>
+
+                                <label >@line.Quantity</label>
+
+                                <label>@string.Format("{0:C2}",line.Product.GiaLonNhat)</label>
                             </li>
                         }
                         <li class="list-group-item d-flex justify-content-between align-items-center px-0">
@@ -111,15 +81,27 @@
                                     <p class="mb-0">(including VAT)</p>
                                 </strong>
                             </div>
-                            <span><strong>@string.Format("{0:C2}", Model.ComputeTotalValue())</strong></span>
+                            <label>@string.Format("{0:C2}", Model.Cart.ComputeTotalValue())</label>
+
                             </li>
-                        } else
+                        } 
+                        else
                         {
                             <p>Your cart is empty.</p>
                         }
                     </ul> 
-                        
-                    <button type="button" class="btn btn-primary btn-block waves-effect waves-light">Payment Confirmation</button>
+                    
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" id="cash" name="paymentMethod" value="cash">
+                        <label class="form-check-label" for="cash">Thanh toán tiền mặt</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" id="bankTransfer" name="paymentMethod" value="bankTransfer">
+                        <label class="form-check-label" for="bankTransfer">Thanh toán chuyển khoản</label>
+                      </div>
+  
+                      <input type="submit" value="Đặt hàng" class="btn btn-primary mt-2">
+                    
                </div>
             </div>
             <!-- Card -->
@@ -150,6 +132,9 @@
           <!--Grid column-->
 
         </div>
+        </form>
+        <!--Grid row-->
+        
         <!--Grid row-->
 
       </section>

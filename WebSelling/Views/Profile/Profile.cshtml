@@ -3,7 +3,7 @@
     ViewData["Title"] = "Profile";
     Layout = "~/Views/Shared/_LayoutCart.cshtml";
 }
-@model KhachHang
+@model ThongTinKhachHang
 <h1>Profile</h1>
 
 <section style="background-color: #eee;">
@@ -14,63 +14,65 @@
           <div class="card-body text-center">
             <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
               class="rounded-circle img-fluid" style="width: 150px;">
-            <h5 class="my-3">@Model.TenKhachHang</h5>
-            <p class="text-muted mb-2">@Model.SoDienThoai</p>            
-            <p class="text-muted mb-2">@Model.NgaySinh.GetValueOrDefault().ToString("dd/MM/yyyy")</p>
-            <p class="text-muted mb-2">@Model.DiaChi</p>            
+            <h5 class="my-3">@Model?.TenKhachHang</h5>
+            <p class="text-muted mb-2">@Model?.SoDienThoai</p>            
+            <p class="text-muted mb-2">@Model?.NgaySinh.GetValueOrDefault().ToString("dd/MM/yyyy")</p>
+            <p class="text-muted mb-2">@Model?.DiaChi</p>            
           </div>
         </div>
       </div>
       <form  method="post" asp-action="Profile">
-      <div class="col-lg-8">
-        <div class="card mb-4">
-          <div class="card-body">
+          <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+          <input type="hidden" asp-for="MaKhachHang"/>
+          <div class="col-lg-8">
+            <div class="card mb-4">
+              <div class="card-body">
               
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Full Name</p>
-              </div>
-              <div class="col-sm-9">
-                <input asp-for="TenKhachHang" class="form-control" />
-                <span asp-validation-for="TenKhachHang" class="text-danger"></span>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Date</p>
-              </div>
-              <div class="col-sm-9">                
-                <input asp-for="NgaySinh" class="form-control" type="date"/>
-                <span asp-validation-for="NgaySinh" class="text-danger"></span>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Phone</p>
-              </div>
-              <div class="col-sm-9">
-                <input asp-for="SoDienThoai" class="form-control" />
-                <span asp-validation-for="SoDienThoai" class="text-danger"></span>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0">Address</p>
-              </div>
-              <div class="col-sm-9">
-                <input asp-for="DiaChi" class="form-control" />
-                <span asp-validation-for="DiaChi" class="text-danger"></span>
-              </div>
-            </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Full Name</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <input asp-for="TenKhachHang" class="form-control" />
+                    <span asp-validation-for="TenKhachHang" class="text-danger"></span>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Date</p>
+                  </div>
+                  <div class="col-sm-9">                
+                    <input asp-for="NgaySinh" class="form-control" type="date"/>
+                    <span asp-validation-for="NgaySinh" class="text-danger"></span>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Phone</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <input asp-for="SoDienThoai" class="form-control" />
+                    <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Address</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <input asp-for="DiaChi" class="form-control" />
+                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                  </div>
+                </div>
 
+              </div>
+
+            </div>
+                <button type="submit" value="Save" class="btn btn-outline-secondary">Save</button>
           </div>
-
-        </div>
-            <button type="submit" value="Save" class="btn btn-outline-secondary">Save</button>
-      </div>
 
       </form>
     </div>

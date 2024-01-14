@@ -48,7 +48,7 @@
             </td>
             <td>
                 <a class="btn btn-gradient-primary btn-fw" asp-action="UpdateDetail" asp-route-maSanPham="@item.MaChiTietSp">Edit</a> |
-                <a class="btn btn-gradient-info btn-fw" asp-action="DeleteDetail" asp-route-maSanPham="@item.MaChiTietSp">Delete</a>
+                <a class="btn btn-gradient-info btn-fw" asp-action="DeleteDetail" asp-route-maSanPham="@item.MaChiTietSp" onclick="return confirmDelete();">Delete</a>
             </td>
         </tr>
 }

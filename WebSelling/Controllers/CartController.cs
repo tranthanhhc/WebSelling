@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WebSelling.Infrastructure;
 using WebSelling.Models;
+using WebSelling.Models.Authentication;
+using WebSelling.ViewModels;
 
 namespace WebSelling.Controllers
 {
@@ -13,6 +16,7 @@ namespace WebSelling.Controllers
 
             return View("Cart",HttpContext.Session.GetJson<Cart>("cart"));
         }
+        [Authentication]
         public IActionResult AddToCart(string productId)
         {
             DanhMucSanPham? product = db.DanhMucSanPhams.FirstOrDefault( x =>x.MaSanPham == productId);
@@ -24,6 +28,7 @@ namespace WebSelling.Controllers
             }
             return View("Cart",Cart);
         }
+        [Authentication]
         public IActionResult AddFromProduct(string productId)
         {
             DanhMucSanPham? product = db.DanhMucSanPhams.FirstOrDefault(x => x.MaSanPham == productId);
@@ -63,8 +68,30 @@ namespace WebSelling.Controllers
 
         public IActionResult Checkout()
         {
-            Cart = HttpContext.Session.GetJson<Cart>("cart");
-            return View("Checkout", Cart);
+            var viewModel = new CheckoutViewModel
+            {
+                Cart = HttpContext.Session.GetJson<Cart>("cart"),
+                HoaDonKH = new HoaDonKhachHang()
+            };
+            return View(viewModel);
+        }
+        
+        [HttpPost]
+        public IActionResult AddBill(CheckoutViewModel viewModel)
+        {
+            
+            var hoaDon = viewModel.HoaDonKH;
+            var cart = HttpContext.Session.GetJson<Cart>("cart");
+
+            hoaDon.TenHang = cart.Lines[0].Product.TenSanPham;
+            hoaDon.SoLuong = cart.Lines[0].Quantity;
+            hoaDon.TongTien = cart.ComputeTotalValue();
+            hoaDon.NgayTao = DateTime.Now;
+            db.HoaDonKhachHangs.Add(hoaDon);
+            db.SaveChanges();
+            TempData["OrderSuccessMessage"] = "Đặt hàng thành công!";
+
+            return RedirectToAction("Checkout");        
         }
     }
 }

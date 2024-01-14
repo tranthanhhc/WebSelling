@@ -6,6 +6,6 @@ namespace WebSelling.ViewModels
     {
         public DanhMucSanPham danhMucSp { get; set; }
         public List<AnhSanPham> anhSps { get; set; }
-
+        public List<Comment> comments { get; set; }
     }
 }

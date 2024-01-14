@@ -50,7 +50,7 @@
                                         </div>
                                         <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                             <a asp-action="RemoveLineCart" asp-controller="Cart" asp-route-productId="@line.Product.MaSanPham" 
-                                             class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                                             class="text-danger" onclick="return confirmDelete();"><i class="fas fa-trash fa-lg"></i></a>
                                         </div>
                                     </div>
                                 </div>

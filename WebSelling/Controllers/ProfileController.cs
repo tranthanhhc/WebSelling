@@ -7,40 +7,45 @@ namespace WebSelling.Controllers
 {
     public class ProfileController : Controller
     {
-        private readonly WDeviceContext _db;
+        WDeviceContext db = new WDeviceContext();
 
-        public ProfileController(WDeviceContext db)
-        {
-            _db = db;
-        }
         public IActionResult Index(string Username)
         {
-            var khachHang = _db.KhachHangs.FirstOrDefault(x => x.Username == Username);
+            var khachHang = db.ThongTinKhachHangs.FirstOrDefault(x =>x.Username == Username);
             return View("Profile", khachHang);
            
         }
         [Route("suathongtin")]
         [HttpGet]
-        public IActionResult Profile(string Username)
+        public IActionResult Profile(int maKhachHang)
         {
-            var khachHang = _db.KhachHangs.FirstOrDefault(x => x.Username == Username);
-            return View("Profile", khachHang);
+            var khachHang = db.ThongTinKhachHangs.Find(maKhachHang);
+            return View(khachHang);
         }
         [Route("suathongtin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Profile(KhachHang khachHang)
+        public IActionResult Profile(ThongTinKhachHang khachHang)
         {
             if (ModelState.IsValid)
             {
-                _db.Update(khachHang);
-                _db.SaveChanges();
-                return RedirectToAction("Profile","Profile");
+                var existingKhachHang = db.ThongTinKhachHangs.Find(khachHang.MaKhachHang);
+                if (existingKhachHang != null)
+                {
+                    existingKhachHang.TenKhachHang = khachHang.TenKhachHang;
+                    existingKhachHang.NgaySinh = khachHang.NgaySinh;
+                    existingKhachHang.SoDienThoai = khachHang.SoDienThoai;
+                    existingKhachHang.DiaChi = khachHang.DiaChi;
+
+                    db.Update(existingKhachHang);
+                    db.SaveChanges();
+
+                    var updatedKhachHang = db.ThongTinKhachHangs.Find(khachHang.MaKhachHang);
+                    return View("Profile", updatedKhachHang);
+                }
             }
+
             return View(khachHang);
-
         }
-
-
     }
 }
